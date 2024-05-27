@@ -50,21 +50,41 @@ async function fetchData() {
 
   // 👇 ==================== TASK 3 START ==================== 👇
 
-  for (let learner of learners) { // looping over each learner object
-
-    // 🧠 Flesh out the elements that describe each learner
-    // ❗ Give the elements below their (initial) classes, textContent and proper nesting.
-    // ❗ Do not change the variable names, as the code that follows depends on those names.
-    // ❗ Also, loop over the mentors inside the learner object, creating an <li> element for each mentor.
-    // ❗ Fill each <li> with a mentor name, and append it to the <ul> mentorList.
-    // ❗ Inspect the mock site closely to understand what the initial texts and classes look like!
-
-    const card = document.createElement('div')
-    const heading = document.createElement('h3')
-    const email = document.createElement('div')
-    const mentorsHeading = document.createElement('h4')
-    const mentorsList = document.createElement('ul')
-
+  for (let learner of learners) {
+    
+    const card = document.createElement('div');
+    card.classList.add('learner-card');  
+    
+    const heading = document.createElement('h3');
+    heading.classList.add('learner-name');
+    heading.textContent = learner.name;
+    
+    const email = document.createElement('div');
+    email.classList.add('learner-email');
+    email.textContent = `Email: ${learner.email}`;
+  
+    
+    const mentorsHeading = document.createElement('h4');
+    mentorsHeading.classList.add('mentors-heading');
+    mentorsHeading.textContent = 'Mentors:';
+  
+    const mentorsList = document.createElement('ul');
+    mentorsList.classList.add('mentors-list');
+  
+    for (let mentor of learner.mentors) {
+      const mentorItem = document.createElement('li');
+      mentorItem.textContent = mentor;  // Set mentor name
+  
+      mentorsList.appendChild(mentorItem);
+    }
+  
+    card.appendChild(heading);
+    card.appendChild(email);
+    card.appendChild(mentorsHeading);
+    card.appendChild(mentorsList);
+  
+    document.getElementById('learners-container').appendChild(card);
+  }
     // 👆 ==================== TASK 3 END ====================== 👆
 
     // 👆 WORK ONLY ABOVE THIS LINE 👆
@@ -114,7 +134,7 @@ async function fetchData() {
   const footer = document.querySelector('footer')
   const currentYear = new Date().getFullYear()
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
-}
+
 
 // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
