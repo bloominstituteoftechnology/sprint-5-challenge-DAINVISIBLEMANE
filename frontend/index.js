@@ -3,8 +3,8 @@ const axios = require('axios');
 async function sprintChallenge5() {
   let mentorsResponse = await axios.get('/api/mentors');
   let learnersResponse = await axios.get('/api/learners');
-  let mentors = mentorsResponse.data;
-  let learners = learnersResponse.data;
+  let mentors = [mentorsResponse.data];
+  let learners = [learnersResponse.data];
 
   learners = learners.map(learner => {
     learner.mentors = learner.mentors.map(id => mentors.find(mentor => mentor.id === id).name);
