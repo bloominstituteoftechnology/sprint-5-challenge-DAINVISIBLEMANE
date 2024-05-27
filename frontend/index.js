@@ -9,8 +9,20 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   // ❗ Use the variables `mentors` and `learners` to store the data.
   // ❗ Use the await keyword when using axios.
 
-  let mentors = [] // fix this
-  let learners = [] // fix this
+  let mentors = []
+let learners = []
+
+async function fetchData() {
+  try {
+    const mentorsResponse = await axios.get('https://api.example.com/mentors')
+    mentors = mentorsResponse.data
+
+    const learnersResponse = await axios.get('https://api.example.com/learners')
+    learners = learnersResponse.data
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  }
+}
 
   // 👆 ==================== TASK 1 END ====================== 👆
 
