@@ -10,7 +10,7 @@ async function sprintChallenge5() {
   learners = learners.map(learner => {
     learner.mentors = learner.mentors.map(id => mentors.find(mentor => mentor.id === id).name);
     return learner;
-  }); // Added closing parenthesis here
+  });
   // 👆 ==================== TASK 2 END ====================== 👆
 
   const cardsContainer = document.querySelector('.cards')
@@ -45,10 +45,20 @@ async function sprintChallenge5() {
     cardsContainer.appendChild(card);
   }
   // 👆 ==================== TASK 3 END ====================== 👆
+
+  // Check the footer text after all cards have been created
+  const footerText = /© BLOOM INSTITUTE OF TECHNOLOGY/i;
+  const footerElement = screen.getByText((content, node) => {
+    const hasText = (node) => node.textContent === footerText;
+    const nodeHasText = hasText(node);
+    const childrenDontHaveText = Array.from(node.children).every(
+      (child) => !hasText(child)
+    );
+
+    return nodeHasText && childrenDontHaveText;
+  });
+
+  // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
+  if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
+  else sprintChallenge5()
 }
-
-// ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
-if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
-else sprintChallenge5()
-
-  
