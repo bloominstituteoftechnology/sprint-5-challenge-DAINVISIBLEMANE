@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = ('axios');
 
 async function sprintChallenge5() {
   let mentorsResponse = await axios.get('/api/mentors');
