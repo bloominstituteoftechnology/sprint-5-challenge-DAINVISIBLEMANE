@@ -1,9 +1,11 @@
+const axios = require('axios');
+
 async function sprintChallenge5() {
   // 👇 ==================== TASK 1 START ==================== 👇
   let mentorsResponse = await axios.get('/api/mentors');
   let learnersResponse = await axios.get('/api/learners');
   let mentors = mentorsResponse.data; // Access the data property of the response
-  let learners = learnersResponse.data; // Access the data 
+  let learners = learnersResponse.data; // Access the data property of the response
   // 👆 ==================== TASK 1 END ====================== 👆
 
   // 👇 ==================== TASK 2 START ==================== 👇
@@ -46,19 +48,12 @@ async function sprintChallenge5() {
   }
   // 👆 ==================== TASK 3 END ====================== 👆
 
-  // Check the footer text after all cards have been created
-  const footerText = /© BLOOM INSTITUTE OF TECHNOLOGY/i;
-  const footerElement = screen.getByText((content, node) => {
-    const hasText = (node) => node.textContent === footerText;
-    const nodeHasText = hasText(node);
-    const childrenDontHaveText = Array.from(node.children).every(
-      (child) => !hasText(child)
-    );
-
-    return nodeHasText && childrenDontHaveText;
-  });
-
-  // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
-  if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
-  else sprintChallenge5()
+  const footer = document.querySelector('footer')
+  const currentYear = new Date().getFullYear()
+  footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
 }
+
+// ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
+if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
+else sprintChallenge5()
+
