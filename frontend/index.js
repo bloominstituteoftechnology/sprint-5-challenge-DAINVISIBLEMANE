@@ -1,14 +1,16 @@
 async function sprintChallenge5() {
   // 👇 ==================== TASK 1 START ==================== 👇
-  let mentors = await axios.get('/api/mentors'); // fix this
-  let learners = await axios.get('/api/learners'); // fix this
+  let mentorsResponse = await axios.get('/api/mentors');
+  let learnersResponse = await axios.get('/api/learners');
+  let mentors = mentorsResponse.data; // Access the data property of the response
+  let learners = learnersResponse.data; // Access the data 
   // 👆 ==================== TASK 1 END ====================== 👆
 
   // 👇 ==================== TASK 2 START ==================== 👇
   learners = learners.map(learner => {
     learner.mentors = learner.mentors.map(id => mentors.find(mentor => mentor.id === id).name);
     return learner;
-  });
+  }); // Added closing parenthesis here
   // 👆 ==================== TASK 2 END ====================== 👆
 
   const cardsContainer = document.querySelector('.cards')
@@ -45,8 +47,8 @@ async function sprintChallenge5() {
   // 👆 ==================== TASK 3 END ====================== 👆
 }
 
-
 // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
 else sprintChallenge5()
+
   
