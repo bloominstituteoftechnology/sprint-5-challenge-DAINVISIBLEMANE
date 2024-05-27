@@ -1,5 +1,4 @@
-const axios = require('axios');
-
+const axios = require ('axios')
 async function sprintChallenge5() {
   let mentorsResponse = await axios.get('/api/mentors');
   let learnersResponse = await axios.get('/api/learners');
@@ -14,6 +13,7 @@ async function sprintChallenge5() {
   const cardsContainer = document.querySelector('.cards')
   const info = document.querySelector('.info')
   info.textContent = 'No learner is selected'
+  
 
   for (let learner of learners) {
     const card = document.createElement('div')
@@ -21,21 +21,24 @@ async function sprintChallenge5() {
 
     // Add an event listener to the card
     card.addEventListener('click', () => {
-      // Remove the 'selected' class from all other cards
-      document.querySelectorAll('.card.selected').forEach(selectedCard => {
-        selectedCard.classList.remove('selected');
-      });
+  // Deselect all other cards
+  const allCards = document.querySelectorAll('.card');
+  allCards.forEach((otherCard) => {
+    if (otherCard !== card) {
+      otherCard.classList.remove('selected');
+    }
+  });
 
-      // Toggle the 'selected' class on the clicked card
-      card.classList.toggle('selected');
+  // Toggle the 'selected' class on the clicked card
+  card.classList.toggle('selected');
 
-      // Update the info text based on whether the card is selected
-      if (card.classList.contains('selected')) {
-        info.textContent = `The selected learner is ${learner.fullName}`;
-      } else {
-        info.textContent = 'No learner is selected';
-      }
-    });
+  // Update the info text based on whether the card is selected
+  if (card.classList.contains('selected')) {
+    info.textContent = `The selected learner is ${learner.fullName}`;
+  } else {
+    info.textContent = 'No learner is selected';
+  }
+});
 
     const heading = document.createElement('h3')
     heading.textContent = learner.fullName;
@@ -54,7 +57,15 @@ async function sprintChallenge5() {
       const mentorItem = document.createElement('li');
       mentorItem.textContent = mentor;
       mentorsList.appendChild(mentorItem);
+      mentorsList.style.display = 'none';
+
+      if (card.classList.contains('selected')) {
+        mentorsList.style.display = 'block';
+      } else {
+        mentorsList.style.display = 'none';
+      }
     });
+    
     card.appendChild(mentorsList);
 
     cardsContainer.appendChild(card);
@@ -64,7 +75,6 @@ async function sprintChallenge5() {
   const currentYear = new Date().getFullYear()
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
 }
-
 
 // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
