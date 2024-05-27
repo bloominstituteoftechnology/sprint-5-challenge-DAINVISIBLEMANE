@@ -1,28 +1,41 @@
 const axios = require('axios');
 
 async function sprintChallenge5() {
-  // 👇 ==================== TASK 1 START ==================== 👇
   let mentorsResponse = await axios.get('/api/mentors');
   let learnersResponse = await axios.get('/api/learners');
-  let mentors = mentorsResponse.data; // Access the data property of the response
-  let learners = learnersResponse.data; // Access the data property of the response
-  // 👆 ==================== TASK 1 END ====================== 👆
+  let mentors = mentorsResponse.data;
+  let learners = learnersResponse.data;
 
-  // 👇 ==================== TASK 2 START ==================== 👇
   learners = learners.map(learner => {
     learner.mentors = learner.mentors.map(id => mentors.find(mentor => mentor.id === id).name);
     return learner;
   });
-  // 👆 ==================== TASK 2 END ====================== 👆
 
   const cardsContainer = document.querySelector('.cards')
   const info = document.querySelector('.info')
   info.textContent = 'No learner is selected'
 
-  // 👇 ==================== TASK 3 START ==================== 👇
   for (let learner of learners) {
     const card = document.createElement('div')
     card.classList.add('card');
+
+    // Add an event listener to the card
+    card.addEventListener('click', () => {
+      // Remove the 'selected' class from all other cards
+      document.querySelectorAll('.card.selected').forEach(selectedCard => {
+        selectedCard.classList.remove('selected');
+      });
+
+      // Toggle the 'selected' class on the clicked card
+      card.classList.toggle('selected');
+
+      // Update the info text based on whether the card is selected
+      if (card.classList.contains('selected')) {
+        info.textContent = `The selected learner is ${learner.fullName}`;
+      } else {
+        info.textContent = 'No learner is selected';
+      }
+    });
 
     const heading = document.createElement('h3')
     heading.textContent = learner.fullName;
@@ -46,12 +59,12 @@ async function sprintChallenge5() {
 
     cardsContainer.appendChild(card);
   }
-  // 👆 ==================== TASK 3 END ====================== 👆
 
   const footer = document.querySelector('footer')
   const currentYear = new Date().getFullYear()
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
 }
+
 
 // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
