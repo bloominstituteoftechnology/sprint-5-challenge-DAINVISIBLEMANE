@@ -31,15 +31,15 @@ async function fetchData() {
   // 🧠 Combine learners and mentors.
   // ❗ At this point the learner objects only have the mentors' IDs.
   // ❗ Fix the `learners` array so that each learner ends up with this exact structure:
-  // {
-  //   id: 6,
-  //   fullName: "Bob Johnson",
-  //   email: "bob.johnson@example.com",
-  //   mentors: [
-  //     "Bill Gates",
-  //     "Grace Hopper"
-  //   ]`
-  // }
+  function combineLearnersAndMentors() {
+    learners.forEach(learner => {
+      learner.mentors = mentors.filter(mentor => learner.mentorIds.includes(mentor.id))
+        .map(mentor => mentor.fullName)
+    })
+  }
+  
+  combineLearnersAndMentors() // Call the function to combine data
+  
 
   // 👆 ==================== TASK 2 END ====================== 👆
 
