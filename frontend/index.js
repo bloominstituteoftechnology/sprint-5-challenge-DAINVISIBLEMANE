@@ -1,48 +1,57 @@
 async function sprintChallenge5() {
-  let mentorsResponse = await fetch('http://localhost:3003/api/mentors');
-  let learnersResponse = await fetch('http://localhost:3003/api/learners');
+  // Import Axios (if not already done)
+  const axios = require('axios');
 
-let mentors = await mentorsResponse.json();
-  let learners = await learnersResponse.json();
+  const mentorsResponse = await axios.get('http://localhost:3003/api/mentors');
+  const learnersResponse = await axios.get('http://localhost:3003/api/learners');
 
-  learners = learners.map(learner => {
-    learner.mentors = learner.mentors.map(name => {
-      const mentor = mentors.find(mentor => mentor.name === name);
-      return mentor ? mentor.name : 'Unknown Mentor'; 
+  const mentors = mentorsResponse.data;
+  const learners = learnersResponse.data;
+
+  const updatedLearners = learners.map((learner) => {
+    const mentorsForLearner = learner.mentors.map((mentorId) => {
+      const mentor = mentors.find((m) => m.id === mentorId);
+      return mentor ? `${mentor.firstName} ${mentor.lastName}` : 'unknown mentor';
     });
-    return learner;
-    
+    return {
+      ...learner,
+      mentors: mentorsForLearner,
+    };
   });
+
+  console.log(updatedLearners);
 
   const cardsContainer = document.querySelector('.cards');
   const info = document.querySelector('.info');
   info.textContent = 'No learner is selected';
 
-  for (let learner of learners) {
+  // Create a Document Fragment to append all cards at once
+  const fragment = document.createDocumentFragment();
+
+  // Create cards using updatedLearners array
+  updatedLearners.forEach((learner) => {
     const card = document.createElement('div');
     card.classList.add('card');
 
-   
-    card.addEventListener('click', () => {
-      
+    // Add event listener for card selection
+    card.addEventListener('click', function selectCard() {
       const allCards = document.querySelectorAll('.card');
-      allCards.forEach((otherCard) => {
+      allCards.forEach(otherCard => {
         if (otherCard !== card) {
           otherCard.classList.remove('selected');
         }
       });
 
-      
       card.classList.toggle('selected');
+      info.textContent = card.classList.contains('selected') ?
+        `The selected learner is ${learner.fullName}` : 'No learner is selected';
 
-      
-      if (card.classList.contains('selected')) {
-        info.textContent = `The selected learner is ${learner.fullName}`;
-      } else {
-        info.textContent = 'No learner is selected';
-      }
+      // Toggle mentors list display based on selection
+      const mentorsList = card.querySelector('ul');
+      mentorsList.style.display = card.classList.contains('selected') ? 'block' : 'none';
     });
 
+    // Append child elements to card
     const heading = document.createElement('h3');
     heading.textContent = learner.fullName;
     card.appendChild(heading);
@@ -53,35 +62,25 @@ let mentors = await mentorsResponse.json();
 
     const mentorsHeading = document.createElement('h4');
     mentorsHeading.textContent = 'Mentors';
+    mentorsHeading.className = 'closed';
     card.appendChild(mentorsHeading);
 
     const mentorsList = document.createElement('ul');
-    mentorsList.style.display = 'none'; 
-    
-
+    mentorsList.style.display = 'none'; // Hide mentors initially
     learner.mentors.forEach(mentor => {
       const mentorItem = document.createElement('li');
-      mentorItem.textContent = mentor ? mentor : 'unknown'; 
-      card.appendChild(mentorItem);
+      mentorItem.textContent = mentor;
+      mentorsList.appendChild(mentorItem);
     });
 
-   
+    card.appendChild(mentorsList);
+    fragment.appendChild(card); // Append card to fragment
+  });
 
+  // Append the fragment to the cards container
+  cardsContainer.appendChild(fragment);
 
-
-    
-    card.addEventListener('click', () => {
-      
-
-      if (card.classList.contains('selected')) {
-        mentorsList.style.display = 'block';
-      } else {
-        mentorsList.style.display = 'none';
-      }
-    });    
-    cardsContainer.appendChild(card);
-  }
-
+  // Update footer with current year
   const footer = document.querySelector('footer');
   const currentYear = new Date().getFullYear();
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`;
